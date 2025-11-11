@@ -40,6 +40,10 @@ app.patch('/profile', authenticateJWT, handleProfileUpdate);
 app.post('/logout', authenticateJWT, handleLogout);
 app.get('/captcha', handleCaptcha);
 
-app.listen(3000, () => {
-  console.log('Server running at http://localhost:3000');
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(3000, () => {
+    console.log('Server running at http://localhost:3000');
+  });
+}
+
+export default app;

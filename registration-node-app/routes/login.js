@@ -1,6 +1,7 @@
 import { pool } from '../db.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../utils/jwt.js';
 
 export async function handleLogin(req, res) {
   const { email, password } = req.body;
@@ -30,15 +31,16 @@ export async function handleLogin(req, res) {
 
     const token = jwt.sign(
       { userId: user.id, email },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: '1h' }
     );
 
     return res.json({
       success: true,
       message: 'Login successful!',
+      redirectUrl: '/profile.html',
       token,
-      redirectUrl: '/profile.html'
+      name: user.name
     });
   } catch (err) {
     console.error('Login error:', err);

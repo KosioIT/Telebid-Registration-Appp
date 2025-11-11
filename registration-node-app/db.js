@@ -6,3 +6,5 @@ export const pool = mysql.createPool({
   password: 'koki$ql+5473+',
   database: 'registration_app',
 });
+
+export default pool;

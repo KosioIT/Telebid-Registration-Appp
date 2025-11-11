@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
         const user = await response.json();
-        welcomeText.textContent = `Welcome, ${user.username}!`;
+        welcomeText.textContent = `Welcome, ${user.name}!`;
     } catch (err) {
         console.error(err);
         welcomeText.textContent = "Welcome!";
