@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="bg">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="forms.js" defer></script>
+    <script type="module" src="register.js" defer></script>
+  </head>
+  <body>
+    <div class="flex-center form-container">
+      <h2>Register</h2>
+
+      <form id="register-form" method="POST" action="/register">
+        <div class="flex-center form-group">
+          <label class="form-label" for="name">Full name:</label>
+          <input
+            class="casual-input"
+            type="text"
+            id="fname"
+            name="fname"
+            placeholder="Your full name"
+            required
+            minlength="6"
+            maxlength="50"
+          />
+          <span id="name-check" class="checkmark">✓</span>
+        </div>
+        <div id="name-err" class="err"></div>
+
+        <div class="flex-center form-group">
+          <label class="form-label" for="email">Email address:</label>
+          <input
+            class="casual-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="john_doe@example.com"
+            required
+          />
+          <span id="email-check" class="checkmark">✓</span>
+        </div>
+        <div id="email-err" class="err"></div>
+
+        <div class="flex-center form-group">
+          <label class="form-label" for="password">Password:</label>
+          <div class="flex-center password-wrapper">
+            <input
+              id="password"
+              class="casual-input"
+              type="password"
+              name="password"
+              required
+              minlength="8"
+            />
+            <button type="button" class="toggle-psw-btn" data-target="password"></button>
+            <span id="password-check" class="checkmark">✓</span>
+          </div>
+        </div>
+        <div id="password-err" class="err"></div>
+
+        <div class="flex-center captcha-container">
+          <label>CAPTCHA:</label>
+          <div class="flex-center">
+            <img
+              src="/captcha"
+              alt="CAPTCHA"
+              id="captcha-img"
+              width="110px"
+              height="40px"
+            />
+            <button id="refresh-btn" type="button" title="Refresh CAPTCHA">
+              🔄
+            </button>
+          </div>
+
+          <div class="flex-center">
+            <label id="captcha-label" class="form-label" for="captcha"
+              >Enter the code above:</label
+            >
+            <input
+              id="captcha-input"
+              type="text"
+              name="captcha"
+              placeholder="Captcha code"
+              required
+              minlength="6"
+            />
+          </div>
+        </div>
+        <!-- Captcha error message (before server check): -->
+        <div id="captcha-err" class="err"></div>
+        
+        <button id="register-btn" type="submit" class="submit-btn">Register</button>
+        <div id="form-message" class="form-message register"></div>
+      </form>
+
+      <p>Already have an account? <a href="./login.html">Login</a></p>
+    </div>
+  </body>
+</html>

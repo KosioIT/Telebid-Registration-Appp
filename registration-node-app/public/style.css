@@ -1,0 +1,240 @@
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Lora:ital,wght@0,400..700;1,400..700&display=swap");
+
+body {
+  /* font-family: "Lora", serif; */
+  font-family: "EB Garamond", serif;
+  font-size: 22px;
+  font-optical-sizing: auto;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin: 40px;
+  background-color: #008cba;
+}
+
+.flex-center {
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.form-container {
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 20px;
+  width: auto;
+  max-width: 450px;
+  margin: 0 auto;
+  background-color: rgb(255, 173, 21);
+}
+
+h2 {
+  margin: 10px auto 40px;
+}
+
+button {
+  font-family: "Lora", serif;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+}
+
+input {
+  font-family: "Lora", serif;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 18px;
+  text-align: center;
+  padding: 3px;
+  box-sizing: border-box;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.form-group {
+  flex-direction: row;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.form-label {
+  text-align: center;
+  width: 130px;
+  margin-right: 8px;
+}
+
+.casual-input {
+  width: 240px;
+}
+
+.checkmark {
+  display: none;
+  margin-left: 8px;
+  color: green;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.err{
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: -3px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.toggle-psw-btn {
+  width: 35px;
+  height: 30px;
+  mix-blend-mode: multiply;
+  background-size: cover;
+  background-position: center;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  scale: 0.7; /* Reduce the size a bit */
+}
+
+.form-message {
+  display: block;
+  margin-top: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.form-message.success {
+  color: aqua;
+}
+
+.form-message.error {
+  color: purple;
+}
+
+#captcha-err{
+  margin-top: 3px !important;
+}
+
+.captcha-container {
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+#captcha-input {
+  width: 140px;
+}
+
+#captcha-label {
+  width: fit-content !important;
+}
+
+#refresh-btn {
+  background-color: transparent;
+}
+
+#register-btn,
+#login-btn {
+  font-family: "Lora", serif;
+  font-size: 20px;
+  padding: 10px 20px;
+  color: white;
+  border-radius: 5px;
+}
+
+#register-btn {
+  background-color: #4caf50;
+  color: white;
+  margin-top: 40px;
+}
+
+#login-btn {
+  background-color: #008cba;
+  border: none;
+  margin-top: 20px;
+}
+
+#welcome-text {
+  margin-bottom: 20px;
+  color: purple;
+  animation: forwards 1s ease-in-out 0s 1 slideInFromLeft;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.profile-container {
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 20px;
+  width: auto;
+  max-width: 450px;
+  margin: 0 auto;
+  background-color: rgb(255, 173, 21);
+}
+
+.btn-container{
+  gap: 10px;
+}
+
+#welcome-text{
+  margin-bottom: 25px;
+}
+
+.profile-container button{
+  font-size: 20px;
+  padding: 10px;
+}
+
+#edit-form {
+  flex-direction: column;
+  gap: 10px;
+}
+
+#edit-btn{
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+#logout-btn{
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+#save-btn{
+  background-color: magenta;
+  color: white;
+  border-radius: 10px;
+}
+
+#cancel-btn{
+  background-color: black;
+  color: white;
+  border-radius: 50px;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="bg">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="forms.js" defer></script>
+    <script type="module" src="login.js" defer></script>
+  </head>
+  <body>
+    <div class="flex-center form-container">
+      <h2>Login</h2>
+      <form id="login-form" method="POST" action="/login">
+        <div class="flex-center form-group">
+          <label class="form-label" for="email">Email:</label>
+          <input id="email" class="casual-input" type="email" name="email" placeholder="john_doe@example.com" required />
+          <span id="email-check" class="checkmark">✓</span>
+        </div>
+        <div id="email-err" class="err"></div>
+
+        <div class="flex-center form-group">
+          <label class="form-label" for="password">Password:</label>
+          <input
+            id="password"
+            class="casual-input"
+            type="password"
+            name="password"
+            required
+            minlength="8"
+          />
+          <button type="button" class="toggle-psw-btn" data-target="password"></button>
+        </div>
+        <div id="password-err" class="err"></div>
+
+        <button id="login-btn" type="submit" class="submit-btn">Login</button>
+        <div id="form-message" class="form-message login"></div>
+      </form>
+
+      <p>Don't have an account? <a href="./register.html">Register</a></p>
+    </div>
+  </body>
+</html>

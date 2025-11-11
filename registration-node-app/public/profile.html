@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="profile.js" defer></script>
+    <script type="module" src="forms.js" defer></script>
+    <title>Profile Page</title>
+  </head>
+  <body>
+    <div class="flex-center profile-container">
+      <h2 id="welcome-text">Welcome!</h2>
+      <div class="flex-center btn-container">
+        <button id="edit-btn">Modify profile info</button>
+        <button id="logout-btn">Logout</button>
+      </div>
+
+      <div id="edit-modal" class="modal hidden">
+        <form
+          id="edit-form"
+          class="flex-center"
+          action="/profile"
+          method="PATCH"
+        >
+          <label for="name">New name:</label>
+          <input type="text" id="name" name="name"/>
+
+          <label for="password">New password:</label>
+          <input type="password" id="password" name="password"/>
+
+          <button id="save-btn" type="submit" class="btn">Save changes</button>
+          <button id="cancel-btn" type="button" class="btn secondary">
+            Cancel
+          </button>
+        </form>
+      </div>
+      <div id="form-message" class="form-message"></div>
+    </div>
+  </body>
+</html>
