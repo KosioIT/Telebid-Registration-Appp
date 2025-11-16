@@ -3,12 +3,10 @@ import session from 'express-session';
 import path from 'path';
 import dotenv from 'dotenv';
 
-import {handleRegister} from './routes/register.js';
-import {handleLogin} from './routes/login.js';
-import {handleProfile, handleProfileUpdate} from './routes/profile.js';
-import {handleCaptcha} from './routes/captcha.js';
+import authRouter from './routes/auth.js';
+import profileRouter from "./routes/profile.js";
+import { handleCaptcha } from './routes/captcha.js';
 import { authenticateJWT } from './utils/jwt.js';
-import { handleLogout } from './routes/logout.js';
 
 dotenv.config();
 
@@ -33,11 +31,8 @@ app.use(session({
 
 app.use(express.static(path.join(process.cwd(), 'public')));
 
-app.post('/register', handleRegister);
-app.post('/login', handleLogin);
-app.get('/profile', authenticateJWT, handleProfile);
-app.patch('/profile', authenticateJWT, handleProfileUpdate);
-app.post('/logout', authenticateJWT, handleLogout);
+app.use('/auth', authRouter);
+app.use('/profile', authenticateJWT, profileRouter);
 app.get('/captcha', handleCaptcha);
 
 if (process.env.NODE_ENV !== 'test') {

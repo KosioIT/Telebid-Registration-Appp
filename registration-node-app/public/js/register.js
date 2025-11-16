@@ -6,13 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const {
         nameCheck, emailCheck, passwordCheck,
         nameErr, emailErr, passwordErr, captchaErr,
-        passwordInput, emailInput,
+        nameInput, passwordInput, emailInput,
         currForm
     } = getSharedElements();
 
     const validator = new FormValidator(currForm);
 
-    const nameInput = document.getElementById("fname");
     nameInput.addEventListener("input", () => {
         if (!validator.validateRequired(nameInput, nameErr, nameCheck, "Name")) return;
         validator.validateWithRules(nameInput, nameErr, nameCheck);

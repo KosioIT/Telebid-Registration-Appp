@@ -2,9 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="style.css" />
-    <script type="module" src="profile.js" defer></script>
-    <script type="module" src="forms.js" defer></script>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script type="module" src="js/profile.js" defer></script>
+    <script type="module" src="js/forms.js" defer></script>
     <title>Profile Page</title>
   </head>
   <body>
@@ -15,26 +15,37 @@
         <button id="logout-btn">Logout</button>
       </div>
 
-      <div id="edit-modal" class="modal hidden">
+      <div id="edit-modal" class="modal hidden form-container">
         <form
           id="edit-form"
           class="flex-center"
+          method="POST"
           action="/profile"
-          method="PATCH"
         >
-          <label for="name">New name:</label>
-          <input type="text" id="name" name="name"/>
+          <div class="flex-center form-group">
+            <label class="form-label" for="name">New name:</label>
+            <input id="name" class="casual-input" type="text" name="name" />
+            <span id="name-check" class="checkmark">✓</span>
+          </div>
+          <div id="name-err" class="err"></div>
 
-          <label for="password">New password:</label>
-          <input type="password" id="password" name="password"/>
+          <div class="flex-center form-group">
+            <label class="form-label" for="password">New password:</label>
+            <input id="password" class="casual-input" type="password"  name="password" />
+            <button type="button" class="toggle-psw-btn" data-target="password"></button>
+            <span id="password-check" class="checkmark">✓</span>
+          </div>
+          <div id="password-err" class="err"></div>
 
-          <button id="save-btn" type="submit" class="btn">Save changes</button>
+          <button id="save-btn" type="submit" class="submit-btn btn">
+            Save changes
+          </button>
           <button id="cancel-btn" type="button" class="btn secondary">
             Cancel
           </button>
         </form>
       </div>
-      <div id="form-message" class="form-message"></div>
+      <div id="form-message" class="form-message profile"></div>
     </div>
   </body>
 </html>

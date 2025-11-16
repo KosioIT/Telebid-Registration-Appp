@@ -3,22 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <title>Register</title>
-    <link rel="stylesheet" href="style.css" />
-    <script type="module" src="forms.js" defer></script>
-    <script type="module" src="register.js" defer></script>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script type="module" src="js/forms.js" defer></script>
+    <script type="module" src="js/register.js" defer></script>
   </head>
   <body>
     <div class="flex-center form-container">
       <h2>Register</h2>
 
-      <form id="register-form" method="POST" action="/register">
+      <form id="register-form" method="POST" action="/auth/register">
         <div class="flex-center form-group">
           <label class="form-label" for="name">Full name:</label>
           <input
             class="casual-input"
             type="text"
-            id="fname"
-            name="fname"
+            id="name"
+            name="name"
             placeholder="Your full name"
             required
             minlength="6"

@@ -1,4 +1,4 @@
-// --- Shared forms logic --- 
+import { TokenManager } from "./utils/tokenManager.js";
 
 // -- Shared elements --
 function getSharedElements() {
@@ -19,8 +19,9 @@ function getSharedElements() {
         forms,
         currForm,
         allFormInputs,
-        passwordInput: formInputsArr.find(input => input.name === "password"),
+        nameInput: formInputsArr.find(input => input.name === "name"),
         emailInput: formInputsArr.find(input => input.name === "email"),
+        passwordInput: formInputsArr.find(input => input.name === "password"),
         nameErr: document.getElementById('name-err'),
         emailErr: document.getElementById('email-err'),
         captchaErr: document.getElementById('captcha-err'),
@@ -36,13 +37,9 @@ function getSharedElements() {
 //Error message default color
 const errDefaultColor = 'yellow';
 
-
 // -- Event listeners -- 
 // DOMContentLoaded event (only HTML content is loaded, i.e. without the resources)
 document.addEventListener("DOMContentLoaded", () => {
-    // Get current form action
-    const action = window.location.pathname.split('/').pop().replace('.html', '');
-
     const {
         allCheckmarks, currForm, allFormInputs, allErrDivs, currFormMsgDiv, currSubmitBtn
     } = getSharedElements();
@@ -70,44 +67,47 @@ document.addEventListener("DOMContentLoaded", () => {
     currFormMsgDiv.textContent = ''; // Clear the form message initially
     currFormMsgDiv.style.display = 'none'; // Hide form message
 
+    if (!currForm.action.includes("profile")) { // We have a custom profile form
+        // Form submit event
+        currForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission
 
-    // Form submit event
-    currForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Prevent default form submission
+            const formData = new FormData(currForm);
+            const data = Object.fromEntries(formData.entries());
+            console.log("form action: ", currForm.action);
 
-        const formData = new FormData(currForm);
-        const data = Object.fromEntries(formData.entries());
+            try {
+                console.log("Sending data:", data);
+                const response = await fetch(`${currForm.action}`, {
+                    method: currForm.method,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data)
+                });
+                const result = await response.json();
+                console.log("Result:", result);
 
-        try {
-            console.log("Sending data:", data);
-            const response = await fetch(`/${action}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(data)
-            });
-            const result = await response.json();
+                showFormResultMessage(currFormMsgDiv, result);
 
-            currFormMsgDiv.innerText = (result.success ? '✅ ' : '❌ ') + result.message;
-            currFormMsgDiv.className = 'form-message ' + (result.success ? 'success' : 'error');
+                if (result.success && result.accessToken && result.refreshToken) {
+                    TokenManager.setTokens({ accessToken: result.accessToken, refreshToken: result.refreshToken });
+                    console.log("Access token:", TokenManager.getAccessToken());
+                    console.log("Refresh token:", TokenManager.getRefreshToken());
+                }
 
-            if (result.redirectUrl) {
-                setTimeout(() => {
-                    currFormMsgDiv.innerText = 'Redirecting...';
-                    window.location.href = result.redirectUrl; // Redirect after 3.5 seconds (allow user to read the message)
-                }, 3500);
+                if (result.redirectUrl) {
+                    setTimeout(() => {
+                        currFormMsgDiv.innerText = 'Redirecting...';
+                        window.location.href = result.redirectUrl; // Redirect after 3.5 seconds (allow user to read the message)
+                    }, 3500);
+                }
+
+            } catch (error) {
+                console.error(error);
+                currFormMsgDiv.innerText = 'Unexpected error occurred! Please try again!';
+                currFormMsgDiv.className = 'form-message error';
             }
-
-            if (result.success && result.token) {
-                localStorage.setItem("token", result.token);
-                console.log("Token:", result.token);
-            }
-
-        } catch (error) {
-            console.error(error);
-            currFormMsgDiv.innerText = 'Unexpected error occurred! Please try again!';
-            currFormMsgDiv.className = 'form-message error';
-        }
-    });
+        });
+    }
 });
 
 // Page load event (after all resources are loaded)
@@ -197,4 +197,10 @@ function showInvalidMark(checkElement) {
     checkElement.innerHTML = '❌';
 }
 
-export { getSharedElements, showErrMsg, hideErrMsg, showOkMark, showInvalidMark, allowSubmittion, preventSubmittion };
+function showFormResultMessage(currFormMsgDiv, result) {
+    currFormMsgDiv.style.display = 'block';
+    currFormMsgDiv.innerText = (result.success ? '✅ ' : '❌ ') + result.message;
+    currFormMsgDiv.className = 'form-message ' + (result.success ? 'success' : 'error');
+}
+
+export { getSharedElements, showErrMsg, hideErrMsg, showOkMark, showInvalidMark, allowSubmittion, preventSubmittion, showFormResultMessage };

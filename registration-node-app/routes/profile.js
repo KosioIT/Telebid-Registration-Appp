@@ -1,69 +1,69 @@
+import express from "express";
 import bcrypt from "bcrypt";
 import { pool } from "../db.js";
 
-// Get the user's profile by email (from the token)
-export async function handleProfile(req, res) {
+const router = express.Router();
+
+router.get("/", async (req, res) => {
+
   try {
-    const [rows] = await pool.execute(
-      "SELECT name, email FROM users WHERE email = ?",
-      [req.user.email]
+    const userId = req.user.userId;
+    const conn = await pool.getConnection();
+    const [rows] = await conn.execute(
+      "SELECT id, name, email FROM users WHERE id = ?",
+      [userId]
     );
+    conn.release();
 
     if (rows.length === 0) {
-      return res.status(404).json({ success: false, message: "User not found!" });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    const user = rows[0];
-    res.status(200).json({
-      success: true,
-      message: "Profile fetched successfully!",
-      name: user.name,
-      email: user.email,
-    });
+    res.status(200).json({ success: true, user: rows[0], message: "Profile fetched successfully" });
+
   } catch (err) {
-    console.error("Profile error:", err);
-    res.status(500).json({ success: false, message: "Internal server error!" });
+    res.status(500).json({ success: false, message: err.message });
   }
-}
+});
 
-export async function handleProfileUpdate(req, res) {
-  const { name, password } = req.body;
-  const email = req.user?.email; // от токена
-
-  if (!email) {
-    return res.status(400).json({ success: false, message: "No email provided!" });
-  }
-
-  if (!name && !password) {
-    return res.status(400).json({ success: false, message: "No data provided!" });
-  }
-
-  const messages = [];
+router.patch("/", async (req, res) => {
+  const userId = req.user.userId;
+  const { name, email, password } = req.body;
 
   try {
+    const conn = await pool.getConnection();
+
+    const updates = [];
+    const values = [];
+
     if (name) {
-      await pool.execute("UPDATE users SET name = ? WHERE email = ?", [name, email]);
-      messages.push("Name updated successfully!");
+      updates.push("name = ?");
+      values.push(name.trim());
     }
-
+    if (email) {
+      updates.push("email = ?");
+      values.push(email.trim());
+    }
     if (password) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      await pool.execute("UPDATE users SET password_hash = ? WHERE email = ?", [hashedPassword, email]);
-      messages.push("Password updated successfully!");
+      const passwordHash = await bcrypt.hash(password, 10);
+      updates.push("password_hash = ?");
+      values.push(passwordHash);
     }
 
-    // Get the updated user from the database
-    const [rows] = await pool.execute("SELECT name, email FROM users WHERE email = ?", [email]);
-    const updatedUser = rows[0];
+    if (updates.length === 0) {
+      conn.release();
+      return res.status(400).json({ success: false, message: "No fields to update" });
+    }
 
-    res.status(200).json({
-      success: true,
-      message: messages.join(" "),
-      name: updatedUser.name,
-      email: updatedUser.email,
-    });
+    values.push(userId);
+    const sql = `UPDATE users SET ${updates.join(", ")} WHERE id = ?`;
+    await conn.execute(sql, values);
+    conn.release();
+
+    res.json({ success: true, message: "Profile updated successfully" });
   } catch (err) {
-    console.error("Update profile error:", err);
-    res.status(500).json({ success: false, message: "Internal server error!" });
+    res.status(500).json({ success: false, message: err.message });
   }
-}
+});
+
+export default router;

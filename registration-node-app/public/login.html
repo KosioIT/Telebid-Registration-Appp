@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <title>Login</title>
-    <link rel="stylesheet" href="style.css" />
-    <script type="module" src="forms.js" defer></script>
-    <script type="module" src="login.js" defer></script>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script type="module" src="js/forms.js" defer></script>
+    <script type="module" src="js/login.js" defer></script>
   </head>
   <body>
     <div class="flex-center form-container">
       <h2>Login</h2>
-      <form id="login-form" method="POST" action="/login">
+      <form id="login-form" method="POST" action="/auth/login">
         <div class="flex-center form-group">
           <label class="form-label" for="email">Email:</label>
           <input id="email" class="casual-input" type="email" name="email" placeholder="john_doe@example.com" required />

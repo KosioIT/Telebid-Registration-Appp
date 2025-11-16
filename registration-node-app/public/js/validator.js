@@ -1,4 +1,4 @@
-import { showErrMsg, hideErrMsg, showInvalidMark, showOkMark, allowSubmittion, preventSubmittion} from "./forms.js";
+import { showErrMsg, hideErrMsg, showInvalidMark, showOkMark, allowSubmittion, preventSubmittion } from "./forms.js";
 
 export class FormValidator {
     constructor(form) {
@@ -9,10 +9,10 @@ export class FormValidator {
     validateRequired(input, errDiv, checkDiv, fieldName = "Field") {
         const value = input.value.trim();
         if (value.length === 0) {
-            this.showError(errDiv, `${fieldName} cannot be empty!`, checkDiv);
+            this.showError(input, errDiv, `${fieldName} cannot be empty!`, checkDiv);
             return false;
         }
-        this.clearError(errDiv, checkDiv);
+        this.clearError(input, errDiv, checkDiv);
         return true;
     }
 
@@ -29,7 +29,7 @@ export class FormValidator {
         const inputName = input.getAttribute("name");
         let rules = [];
 
-        if (inputName === "fname") {
+        if (inputName === "name") {
             const parts = v.split(/\s+/); // Split by whitespace
             const alphabet = this.isCyrillic(v) ? "cyrillic" : this.isLatin(v) ? "latin" : null;
             const regex = alphabet === "cyrillic"
@@ -115,22 +115,24 @@ export class FormValidator {
         const rules = this.getValidationRules(input);
         for (const rule of rules) {
             if (!rule.test) {
-                this.showError(errDiv, rule.msg, checkDiv);
+                this.showError(input, errDiv, rule.msg, checkDiv);
                 return false;
             }
         }
-        this.clearError(errDiv, checkDiv);
+        this.clearError(input, errDiv, checkDiv);
         return true;
     }
     // Helper functions for error messages
-    showError(errDiv, message, checkDiv) {
+    showError(input, errDiv, message, checkDiv) {
         showErrMsg(errDiv, message);
         preventSubmittion();
+        if (input) input.setCustomValidity(message);
         if (checkDiv) showInvalidMark(checkDiv);
     }
-    clearError(errDiv, checkDiv) {
+    clearError(input, errDiv, checkDiv) {
         hideErrMsg(errDiv);
         allowSubmittion();
+        if (input) input.setCustomValidity(""); // Reset custom validity
         if (checkDiv) showOkMark(checkDiv);
     }
 }

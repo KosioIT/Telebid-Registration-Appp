@@ -171,6 +171,7 @@ input {
 }
 
 .profile-container {
+  display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
   border-radius: 20px;
@@ -215,16 +216,17 @@ input {
   margin-top: 20px;
 }
 
-.modal.hidden {
-  display: none;
-}
-
 .modal {
   margin-top: 20px;
   padding: 20px;
+  max-width: 400px;
   border: 1px solid #ddd;
   background: #fafafa;
   border-radius: 6px;
+}
+
+.modal.hidden {
+  display: none;
 }
 
 #save-btn{
