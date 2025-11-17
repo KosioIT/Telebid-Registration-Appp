@@ -109,7 +109,7 @@ input {
 }
 
 .form-message.error {
-  color: purple;
+  color: yellow;
 }
 
 #captcha-err{
@@ -221,8 +221,8 @@ input {
   padding: 20px;
   max-width: 400px;
   border: 1px solid #ddd;
-  background: #fafafa;
-  border-radius: 6px;
+  background: rgb(252, 246, 246);
+  border-radius: 10px;
 }
 
 .modal.hidden {

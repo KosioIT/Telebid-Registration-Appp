@@ -30,7 +30,6 @@ app.use(session({
 }));
 
 app.use(express.static(path.join(process.cwd(), 'public')));
-
 app.use('/auth', authRouter);
 app.use('/profile', authenticateJWT, profileRouter);
 app.get('/captcha', handleCaptcha);

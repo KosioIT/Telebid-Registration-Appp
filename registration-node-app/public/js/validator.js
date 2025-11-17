@@ -1,4 +1,4 @@
-import { showErrMsg, hideErrMsg, showInvalidMark, showOkMark, allowSubmittion, preventSubmittion } from "./forms.js";
+import { showErrMsg, hideErrMsg, showInvalidMark, showOkMark, allowSubmittion, preventSubmittion, errDefaultColor } from "./forms.js";
 
 export class FormValidator {
     constructor(form) {
@@ -111,11 +111,11 @@ export class FormValidator {
         return rules;
     }
 
-    validateWithRules(input, errDiv, checkDiv) {
+    validateWithRules(input, errDiv, checkDiv, color = errDefaultColor) {
         const rules = this.getValidationRules(input);
         for (const rule of rules) {
             if (!rule.test) {
-                this.showError(input, errDiv, rule.msg, checkDiv);
+                this.showError(input, errDiv, rule.msg, checkDiv, color);
                 return false;
             }
         }
@@ -123,8 +123,8 @@ export class FormValidator {
         return true;
     }
     // Helper functions for error messages
-    showError(input, errDiv, message, checkDiv) {
-        showErrMsg(errDiv, message);
+    showError(input, errDiv, message, checkDiv, color = errDefaultColor) {
+        showErrMsg(errDiv, message, color);
         preventSubmittion();
         if (input) input.setCustomValidity(message);
         if (checkDiv) showInvalidMark(checkDiv);

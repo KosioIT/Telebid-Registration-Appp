@@ -35,7 +35,7 @@ function getSharedElements() {
 }
 
 //Error message default color
-const errDefaultColor = 'yellow';
+export const errDefaultColor = 'yellow';
 
 // -- Event listeners -- 
 // DOMContentLoaded event (only HTML content is loaded, i.e. without the resources)
@@ -90,8 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (result.success && result.accessToken && result.refreshToken) {
                     TokenManager.setTokens({ accessToken: result.accessToken, refreshToken: result.refreshToken });
-                    console.log("Access token:", TokenManager.getAccessToken());
-                    console.log("Refresh token:", TokenManager.getRefreshToken());
+                    // console.log("Access token:", TokenManager.getAccessToken());
+                    // console.log("Refresh token:", TokenManager.getRefreshToken());
                 }
 
                 if (result.redirectUrl) {
@@ -199,7 +199,7 @@ function showInvalidMark(checkElement) {
 
 function showFormResultMessage(currFormMsgDiv, result) {
     currFormMsgDiv.style.display = 'block';
-    currFormMsgDiv.innerText = (result.success ? '✅ ' : '❌ ') + result.message;
+    currFormMsgDiv.innerText = (result.success ? '✅ ' : '❌ ') + result.message + "!";
     currFormMsgDiv.className = 'form-message ' + (result.success ? 'success' : 'error');
 }
 

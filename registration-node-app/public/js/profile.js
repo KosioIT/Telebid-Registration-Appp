@@ -4,11 +4,12 @@ import { apiFetch } from "./utils/api.js";
 import { TokenManager } from "./utils/tokenManager.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const { currForm, currSubmitBtn, nameCheck, passwordCheck, nameInput, passwordInput, nameErr, passwordErr, currFormMsgDiv } = getSharedElements();
+    const { currForm, currSubmitBtn, nameCheck, passwordCheck, nameInput, passwordInput, nameErr, passwordErr, allErrDivs, currFormMsgDiv } = getSharedElements();
 
     const validator = new FormValidator(currForm);
-
     preventSubmittion(currSubmitBtn);
+
+    const editErrColor = 'red';
 
     nameInput.addEventListener("input", () => {
         const value = nameInput.value.trim();
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (value.length === 0) {
             validator.clearError(nameInput, nameErr, nameCheck);
         } else {
-            validator.validateWithRules(nameInput, nameErr, nameCheck);
+            validator.validateWithRules(nameInput, nameErr, nameCheck, editErrColor);
         }
     });
 
@@ -26,11 +27,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (value.length === 0) {
             validator.clearError(passwordInput, passwordErr, passwordCheck);
         } else {
-            validator.validateWithRules(passwordInput, passwordErr, passwordCheck);
+            validator.validateWithRules(passwordInput, passwordErr, passwordCheck, editErrColor);
         }
     });
 
     const welcomeText = document.getElementById("welcome-text");
+    const formErr = document.getElementById("form-err");
     const editBtn = document.getElementById("edit-btn");
     const editModal = document.getElementById("edit-modal");
     const cancelBtn = document.getElementById("cancel-btn");
@@ -48,20 +50,20 @@ document.addEventListener("DOMContentLoaded", async () => {
             "Content-Type": "application/json"
         }
     })
-        .then(data => {
-            console.log("res data: ", data);
-            if (data.success) {
-                const user = data.user;
-                welcomeText.textContent = `Welcome, ${user.name}!`;
-            } else {
-                console.log("Error:", data.message);
-                welcomeText.textContent = "Welcome!";
-            }
-        })
-        .catch((err) => {
-            console.log("Unexpected error occurred:", err);
+    .then(data => {
+        console.log("res data: ", data);
+        if (data.success) {
+            const user = data.user;
+            welcomeText.textContent = `Welcome, ${user.name}!`;
+        } else {
+            console.log("Error:", data.message);
             welcomeText.textContent = "Welcome!";
-        });
+        }
+    })
+    .catch((err) => {
+        console.log("Unexpected error occurred:", err);
+        welcomeText.textContent = "Welcome!";
+    });
 
 
     editBtn.addEventListener("click", () => {
@@ -70,7 +72,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     cancelBtn.addEventListener("click", () => {
         editModal.classList.add("hidden");
-        hideErrMsg(currFormMsgDiv);
+        currForm.reset();
+        allErrDivs.forEach(err => err.style.display = 'none'); // Clear (hide) all error messages
     });
 
     currForm.addEventListener("input", () => {
@@ -82,9 +85,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if ((nameFilled || passwordFilled) && nameValid && passwordValid) {
             allowSubmittion();
-            hideErrMsg(currFormMsgDiv);
+            hideErrMsg(formErr);
         } else {
-            showErrMsg(currFormMsgDiv, "Please enter at least a new name or a new password!");
+            showErrMsg(formErr, "Please enter at least a new name or a new password!", editErrColor);
             preventSubmittion();
         }
     });
