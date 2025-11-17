@@ -14,10 +14,19 @@ function generateRefreshToken(payload) {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 }
 
+function checkForMissingFields(fields) {
+  for (const field of fields) {
+    if (!field) {
+      return true;
+    }
+  }
+  return false;
+}
+
 router.post("/register", async (req, res) => {
   const { name, email, password, captcha } = req.body;
 
-  if (!name || !email || !password) {
+  if (checkForMissingFields([name, email, password])) {
     return res.status(400).json({ success: false, message: "Missing required fields!" });
   }
 
@@ -72,13 +81,16 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  if (checkForMissingFields([email, password])) {
+    return res.status(400).json({ success: false, message: "Missing required fields!" });
+  }
   try {
     const conn = await pool.getConnection();
     const [rows] = await conn.execute("SELECT * FROM users WHERE email = ?", [email]);
     conn.release();
 
     if (rows.length === 0) {
-      return res.status(400).json({ success: false, message: "User not found" });
+      return res.status(401).json({ success: false, message: "User not found" });
     }
 
     const user = rows[0];
